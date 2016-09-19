@@ -214,8 +214,7 @@ void declare(int env) {
 				*e++ = POP; *e++ = IP;
 				outfunc();
 			} else if(!strcmp(tks, ";")) {
-				infunc();
-				outfunc();
+				id = this_id + 1;//infunc(); outfunc();
 			} else { printf("error19!\n"); exit(-1); }
 		} else {
 			while(1) {
