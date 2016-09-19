@@ -184,7 +184,7 @@ static Id* declarator(Type *type) {
 		this_id -> type = deriv_type(PTR, type, 0);
 		id = this_id + 1;
 	} else if(type -> base == ARR && this_id -> class == ARG) { //数组为形参
-		this_id -> type = deriv_type(PTR, type, 0);
+		this_id -> type = deriv_type(PTR, type -> rely, 0);
 	}
 	return this_id;
 }
