@@ -75,6 +75,10 @@ static void _print_type(Type *type) {
 		printf("需要%d个参数且返回值为", type -> count);
 		_print_type(type -> rely);
 		printf("的函数");
+	} else if(type -> base == API) {
+		printf("需要%d个参数且返回值为", type -> count);
+		_print_type(type -> rely);
+		printf("的API");
 	} else if(type -> base == INT) {
 		printf("整型");
 	}
@@ -83,7 +87,7 @@ static void _print_type(Type *type) {
 void print_type(Id *this_id) {
 	printf("%s为", this_id -> name);
 	_print_type(this_id -> type);
-	printf("\n");
+	//printf("\n");
 }
 
 static Type* specifier() {

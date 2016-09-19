@@ -21,14 +21,17 @@ void print_ids(Id *this_id) {
 	printf("- %s -\n", this_id -> name);
 	for(Id *i = ids; i < id; i++){
 		if(i -> csmk == GLO) printf("GLO");
+		else if(i -> csmk == ARG) printf("ARG");
 		else if(i -> csmk == FUN) printf("FUN");
 		else if(i -> csmk == LOC) printf("LOC");
 		else if(i -> csmk == ID) {
 			printf("%s ", i -> name);
 			printf("%d ", i -> offset);
-			if(i -> class == GLO) printf("GLO");
-			else if(i -> class == FUN) printf("FUN");
-			else if(i -> class == LOC) printf("LOC");
+			if(i -> class == GLO) printf("GLO ");
+			else if(i -> class == ARG) printf("ARG ");
+			else if(i -> class == FUN) printf("FUN ");
+			else if(i -> class == LOC) printf("LOC ");
+			print_type(i);
 		}
 		printf("\n");
 	}
@@ -44,7 +47,7 @@ int typesize(Type *type) {
 
 void setid(Id *this_id, Type* type) {
 	for(Id *i = this_id - 1; i -> csmk == ID; i--) {
-		if(!strcmp(tks, i -> name)) { printf("error83!\n"); exit(-1); }
+		if(!strcmp(tks, i -> name)) { printf("error84!\n"); exit(-1); }
 	}
 	
 	//this_id -> name = tks;
@@ -91,7 +94,7 @@ Id* getid(char *tks) {
 	for(Id *i = id - 1; i >= ids; i--) {
 		if(i -> csmk == ID && !strcmp(tks, i -> name)) return i;
 	}
-	printf("error84!"); exit(-1);
+	printf("error85!"); exit(-1);
 }
 
 void inblock() {
