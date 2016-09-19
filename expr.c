@@ -185,7 +185,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			if(strcmp(tks, ")")) {
 				while(1) {
 					argc++;
-					expr("");
+					expr(")");
 					*e++ = PUSH; *e++ = AX;
 					if(!strcmp(tks, ")")) break;
 					else if(!strcmp(tks, ",")) next();
@@ -210,8 +210,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			next();
 			if(er.type -> base == PTR || er.type -> base == ARR) er.type = er.type -> rely;
 			else { printf("error47!\n"); exit(-1); }
-			Type *int_type = expr("").type;
-			if(int_type -> base != INT) { printf("error48!\n"); exit(-1); }
+			if(expr("]").type -> base != INT) { printf("error48!\n"); exit(-1); }
 			*e++ = PUSH; *e++ = AX;
 			*e++ = SET; *e++ = AX; *e++ = typesize(er.type);
 			*e++ = MUL;
@@ -224,8 +223,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			next();
 		} else if(!strcmp(tks, "+")) {
 			next();
-			Type *int_type = expr("+").type;
-			if(int_type -> base != INT) { printf("error49!\n"); exit(-1); }
+			if(expr("+").type -> base != INT) { printf("error49!\n"); exit(-1); }
 			if(er.type -> base == INT) {
 				*e++ = ADD;
 			} else if(er.type -> base == PTR || er.type -> base == ARR) {
@@ -237,8 +235,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			} else { printf("error50!\n"); exit(-1); }
 		} else if(!strcmp(tks, "-")) {
 			next();
-			Type *int_type = expr("-").type;
-			if(int_type -> base != INT) { printf("error51!\n"); exit(-1); }
+			if(expr("-").type -> base != INT) { printf("error51!\n"); exit(-1); }
 			if(er.type -> base == INT) {
 				*e++ = SUB;
 			} else if(er.type -> base == PTR || er.type -> base == ARR) {
