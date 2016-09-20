@@ -1,4 +1,4 @@
-//Íâ²¿½Ó¿Ú
+ï»¿//å¤–éƒ¨æ¥å£
 
 #include "cc.h"
 #include <stdio.h>
@@ -32,7 +32,7 @@ void api_call(int offset) {
 	apis[offset]();
 }
 
-int api_getarg(int index) { //index == n ±íÊ¾µÚn¸ö²ÎÊı
+int api_getarg(int index) { //index == n è¡¨ç¤ºç¬¬nä¸ªå‚æ•°
 	return *(data + *(SP + data) - index);
 }
 
