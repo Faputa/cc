@@ -189,7 +189,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 					Type *argtype = expr(")").type;
 					if(argtype -> base == FUN) argtype = deriv_type(PTR, argtype, 0);
 					else if(argtype -> base == ARR) argtype = deriv_type(PTR, argtype -> rely, 0);
-					if((er.type -> argtypels)[argc] != argtype) { printf("error44!\n"); exit(-1); } //参数类型检查
+					if((er.type -> argtyls)[argc] != argtype) { printf("error44!\n"); exit(-1); } //参数类型检查
 					*e++ = PUSH; *e++ = AX;
 					argc++;
 					if(!strcmp(tks, ")")) break;
