@@ -1,4 +1,4 @@
-//字节码生成与解释
+//瀛楄妭鐮佹墦鍗颁笌瑙ｉ噴
 
 #include "cc.h"
 #include <stdio.h>
