@@ -48,7 +48,7 @@ Type* deriv_type(int base, Type *rely, int count) { //类型生成
 			ty -> count = count;
 			return ty++;
 		} else if(base == FUN) {// || base == API) {
-			//if(rely -> base == FUN || rely -> base == API) { printf("error8!\n"); exit(-1); }
+			if(rely -> base == FUN || rely -> base == ARR) { printf("error8!\n"); exit(-1); }
 			for(Type *i = tys; i < ty; i++) {
 				if(i -> base == base
 				&& i -> rely == rely
@@ -57,6 +57,7 @@ Type* deriv_type(int base, Type *rely, int count) { //类型生成
 			ty -> base = base;
 			ty -> rely = rely;
 			ty -> count = count;
+			ty -> argtypels = getargtypels(count);
 			return ty++;
 		} else { printf("error9!\n"); exit(-1); }
 	}
@@ -72,7 +73,13 @@ static void _print_type(Type *type) {
 		_print_type(type -> rely);
 		printf("的元素的数组");
 	} else if(type -> base == FUN) {
-		printf("需要%d个参数且返回值为", type -> count);
+		//printf("需要%d个参数且返回值为", type -> count);
+		for(int i = 0; i < type -> count; i++) {
+			printf("第%d个参数为", i + 1);
+			_print_type(type -> argtypels[i]);
+			printf("、");
+		}
+		printf("返回值为");
 		_print_type(type -> rely);
 		printf("的函数");
 	} else if(type -> base == API) {
@@ -99,9 +106,9 @@ static Type* specifier() {
 
 static int lev(char *opr) {
 	char *oprs[] = {
-		")",
+		")", "]",
 		"", "*",
-		"", "[", "("
+		"", "(", "["
 	};
 	int lev = 1;
 	for(int i = 0; i < sizeof(oprs) / sizeof(*oprs); i++) {
@@ -181,15 +188,14 @@ static Id* declarator(Type *type) {
 	}
 	setid(this_id, type);
 	
-	if(type -> rely != NULL && type -> rely -> base == FUN) {
-		if(type -> base == PTR) id = this_id + 1; //函数指针
-		else { printf("error18!\n"); exit(-1); }
+	if(type -> base == PTR && type -> rely -> base == FUN) { //函数指针
+		id = this_id + 1;//infunc(); outfunc();
 	} else if(type -> base == FUN && this_id -> class == ARG) { //函数为形参
 		this_id -> type = deriv_type(PTR, type, 0);
-		id = this_id + 1;
+		id = this_id + 1;//infunc(); outfunc();
 	} else if(type -> base == ARR && this_id -> class == ARG) { //数组为形参
 		this_id -> type = deriv_type(PTR, type -> rely, 0);
-	}
+	}//print_type(this_id);printf("\n");
 	return this_id;
 }
 
@@ -219,7 +225,7 @@ void declare(int env) {
 				outfunc();
 			} else if(!strcmp(tks, ";")) {
 				id = this_id + 1;//infunc(); outfunc();
-			} else { printf("error19!\n"); exit(-1); }
+			} else { printf("error18!\n"); exit(-1); }
 		} else {
 			while(1) {
 				if(!strcmp(tks, "=")) {
@@ -230,18 +236,18 @@ void declare(int env) {
 						*(data + this_id -> offset) = expr_null();
 					} else if(this_id -> type -> base == ARR) {
 						expr_arr(GLO, this_id -> type, this_id -> offset);
-					} else { printf("error20!\n"); exit(-1); }
+					} else { printf("error19!\n"); exit(-1); }
 				} else {
 					if(this_id -> type -> base == INT) *(data + id -> offset) = 0;
 					else if(this_id -> type -> base == PTR) *(data + id -> offset) = 0;
 					else if(this_id -> type -> base == ARR) memset(data + id -> offset, 0, this_id -> type -> count);
-					else { printf("error21!\n"); exit(-1); }
+					else { printf("error20!\n"); exit(-1); }
 				}
 				if(!strcmp(tks, ";")) break;
 				else if(!strcmp(tks, ",")) {
 					next();
 					this_id = declarator(type);
-				} else { printf("error22!\n"); exit(-1); }
+				} else { printf("error21!\n"); exit(-1); }
 			}
 		}
 	} else if(env == LOC) {
@@ -254,12 +260,12 @@ void declare(int env) {
 				if(this_id -> type -> base == INT) {
 					*e++ = AL; *e++ = this_id -> offset;
 					*e++ = PUSH; *e++ = AX;
-					if(this_id -> type != expr("").type) { printf("error23!\n"); exit(-1); }//*e++ = SET; *e++ = AX; *e++ = atoi(tks);
+					if(this_id -> type != expr("").type) { printf("error22!\n"); exit(-1); }
 					*e++ = ASS;
 				} else if(this_id -> type -> base == PTR) {
 					*e++ = AL; *e++ = this_id -> offset;
 					*e++ = PUSH; *e++ = AX;
-					if(this_id -> type != expr("").type) { printf("error24!\n"); exit(-1); }//*e++ = SET; *e++ = AX; *e++ = atoi(tks);
+					if(this_id -> type != expr("").type) { printf("error23!\n"); exit(-1); }
 					*e++ = ASS;
 				} else if(this_id -> type -> base == ARR) {
 					expr_arr(LOC, this_id -> type, this_id -> offset);
@@ -268,7 +274,7 @@ void declare(int env) {
 			varc += typesize(this_id -> type);
 			if(!strcmp(tks, ";")) break;
 			else if(!strcmp(tks, ",")) next();
-			else { printf("error25!\n"); exit(-1); }
+			else { printf("error24!\n"); exit(-1); }
 		}
 	}
 }

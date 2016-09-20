@@ -6,15 +6,28 @@
 #include <string.h>
 
 Id *id;
+
 static Id *ids;
+static Type **argtypels;
 
 void id_init() {
 	static int is_init = 0;
 	if(!is_init) {
 		ids = id = (Id*)malloc(MAXSIZE * sizeof(Id));
+		argtypels = (Type**)malloc(MAXSIZE * sizeof(Type*));
 		id++ -> csmk = GLO;
 		is_init = 1;
 	}
+}
+
+Type** getargtypels(int count) {
+	if(count == 0) return NULL;
+	Id *_id = id - count;
+	Type **_argtypels = argtypels;
+	while(_id < id) {
+		*argtypels++ = (_id++) -> type;
+	}
+	return _argtypels;
 }
 
 void print_ids(Id *this_id) {

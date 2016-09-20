@@ -8,6 +8,7 @@ typedef struct Type {
 	int base;
 	int count;
 	struct Type *rely;
+	struct Type **argtypels;
 } Type;
 
 typedef struct {
@@ -45,6 +46,7 @@ extern int *e, *emit, *data, tki;
 
 //id.c
 void id_init();
+Type** getargtypels(int count);
 void print_ids();
 int typesize(Type *type);
 void setid(Id *id, Type *type);
