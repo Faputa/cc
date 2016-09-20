@@ -102,9 +102,9 @@ void inblock() {
 }
 
 void outblock() {
-	while(id -> csmk != LOC) {
+	do {
 		id--;
-	}
+	} while(id -> csmk != LOC);
 	//id -> csmk = 0;
 }
 
@@ -126,8 +126,8 @@ void infunc() {
 }
 
 void outfunc() {
-	while(id -> csmk != FUN) {
+	do {
 		id--;
-	}
+	} while(id -> csmk != FUN);
 	//id -> csmk = 0;
 }
