@@ -1,4 +1,4 @@
-//Óï¾ä·ÖÎö
+ï»¿//è¯­å¥åˆ†æ
 
 #include "cc.h"
 #include <stdio.h>
