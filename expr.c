@@ -106,13 +106,18 @@ static int lev(char *opr) { //优先级越高lev越大，其他符号lev为0
 int expr_int(char *last_opr) {
 	if(tki == INT) {
 		*sp = atoi(tks);
+		next();
 	} else if(!strcmp(tks, "(")) {
 		next();
 		expr_int(")");
 		if(strcmp(tks, ")")) { printf("error34!\n"); exit(-1); } //"("无法匹配到")"
+		next();
+	} else if(!strcmp(tks, "!")) {
+		next();
+		expr_int("!");
+		*sp = !*sp;
 	} else { printf("error35!\n"); exit(-1); }
 	
-	next();
 	while(lev(tks) > lev(last_opr)) {
 		char *opr = tks;
 		sp++;
@@ -124,6 +129,15 @@ int expr_int(char *last_opr) {
 		else if(!strcmp(opr, "-")) *sp = opr1 - opr2;
 		else if(!strcmp(opr, "*")) *sp = opr1 * opr2;
 		else if(!strcmp(opr, "/")) *sp = opr1 / opr2;
+		else if(!strcmp(opr, "%")) *sp = opr1 % opr2;
+		else if(!strcmp(opr, "==")) *sp = opr1 == opr2;
+		else if(!strcmp(opr, ">")) *sp = opr1 > opr2;
+		else if(!strcmp(opr, "<")) *sp = opr1 < opr2;
+		else if(!strcmp(opr, "!=")) *sp = opr1 == opr2;
+		else if(!strcmp(opr, ">=")) *sp = opr1 >= opr2;
+		else if(!strcmp(opr, "<=")) *sp = opr1 <= opr2;
+		else if(!strcmp(opr, "&&")) *sp = opr1 && opr2;
+		else if(!strcmp(opr, "||")) *sp = opr1 || opr2;
 		else { printf("error36!\n"); exit(-1); }
 	}
 	return *sp;
