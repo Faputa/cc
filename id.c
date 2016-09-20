@@ -93,14 +93,14 @@ void setid(Id *this_id, Type* type) {
 	if(this_id -> class == GLO) {
 		if(last_id -> csmk == GLO) {
 			this_id -> offset = MAXSIZE - typesize(type);
-			//if(this_id -> type -> base == INT) this_id -> offset = MAXSIZE - 1;
-			//else if(this_id -> type -> base == PTR) this_id -> offset = MAXSIZE - 1;
-			//else if(this_id -> type -> base == ARR) this_id -> offset = MAXSIZE - type -> count;
+			//if(type -> base == INT) this_id -> offset = MAXSIZE - 1;
+			//else if(type -> base == PTR) this_id -> offset = MAXSIZE - 1;
+			//else if(type -> base == ARR) this_id -> offset = MAXSIZE - type -> count;
 		} else {
 			this_id -> offset = last_id -> offset - typesize(type);
-			//if(last_id -> type -> base == INT) this_id -> offset = last_id -> offset - 1;
-			//else if(last_id -> type -> base == PTR) this_id -> offset = last_id -> offset - 1;
-			//else if(last_id -> type -> base == ARR) this_id -> offset = last_id -> offset - type -> count;
+			//if(type -> base == INT) this_id -> offset = last_id -> offset - 1;
+			//else if(type -> base == PTR) this_id -> offset = last_id -> offset - 1;
+			//else if(type -> base == ARR) this_id -> offset = last_id -> offset - type -> count;
 		}
 	} else {
 		if(last_id -> csmk == ARG || last_id -> csmk == FUN || last_id -> offset < 0) { //offset小于0为参数，且此时csmk不可能为LOC
