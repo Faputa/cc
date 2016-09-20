@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "test.h"
 
 int f(int a[], int b) {
 	return a[0] + b;
