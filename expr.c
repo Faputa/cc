@@ -338,34 +338,6 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 				*e++ = OR;
 			} else { printf("error81!\n"); exit(-1); }
 		} else { printf("error82!\n"); exit(-1); }
-		/*} else {
-			char *opr = tks;
-			next();
-			if(er.type != expr(opr).type) { printf("error83!\n"); exit(-1); }
-			if (!strcmp(opr, "+")) *e++ = ADD;
-			else if(!strcmp(opr, "-")) *e++ = SUB;
-			else if(!strcmp(opr, "*")) *e++ = MUL;
-			else if(!strcmp(opr, "/")) *e++ = DIV;
-			else if(!strcmp(opr, "%")) *e++ = MOD;
-			else if(!strcmp(opr, "==")) *e++ = EQ;
-			else if(!strcmp(opr, ">")) *e++ = GT; //greater than
-			else if(!strcmp(opr, "<")) *e++ = LT; //less than
-			else if(!strcmp(opr, "!=")) {
-				*e++ = EQ;
-				*e++ = NOT;
-			}
-			else if(!strcmp(opr, ">=")) {
-				*e++ = LT;
-				*e++ = NOT;
-			}
-			else if(!strcmp(opr, "<=")) {
-				*e++ = GT;
-				*e++ = NOT;
-			}
-			else if(!strcmp(opr, "&&")) *e++ = AND;
-			else if(!strcmp(opr, "||")) *e++ = OR;
-			else { printf("error84!\n"); exit(-1); }
-		}*/
 	}
 	return er;
 }
