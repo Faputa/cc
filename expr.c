@@ -139,7 +139,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 		Id *this_id = getid(tks);
 		er.type = this_id -> type;
 		*e++ = this_id -> class == GLO ? AG: AL; *e++ = this_id -> offset;
-		if(er.type -> base != FUN && er.type -> base != API && er.type -> base != ARR) {
+		if(er.type -> base == INT || er.type -> base == PTR) {
 			*e++ = VAL;
 			er.is_const = 0;
 		}
@@ -155,7 +155,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 		er.type = expr("ref").type;
 		if(er.type -> base != PTR) { printf("error38!\n"); exit(-1); }
 		er.type = er.type -> rely;
-		if(er.type -> base != FUN && er.type -> base != API && er.type -> base != ARR) {
+		if(er.type -> base == INT || er.type -> base == PTR) {
 			*e++ = VAL;
 			er.is_const = 0;
 		}
@@ -164,7 +164,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 		next();
 		Er _er = expr("&");
 		if(!_er.is_lvalue) { printf("error39!\n"); exit(-1); }
-		if(_er.type -> base != FUN && _er.type -> base != API && _er.type -> base != ARR) e--;
+		if(_er.type -> base == INT || _er.type -> base == PTR) e--;
 		er.type = deriv_type(PTR, _er.type, 0);
 	} else if(!strcmp(tks, "!")) {
 		next();
@@ -220,7 +220,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			*e++ = SET; *e++ = AX; *e++ = typesize(er.type);
 			*e++ = MUL;
 			*e++ = ADD;
-			if(er.type -> base != ARR) {
+			if(er.type -> base == INT || er.type -> base == PTR) {
 				*e++ = VAL;
 				er.is_const = 0;
 			}
