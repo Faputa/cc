@@ -6,9 +6,13 @@ make
 
 ## test
 cc test/test1.c
+
 cc test/test2.c
+
 cc test/test3.c
+
 cc test/test4.c
+
 cc test/test5.c
 
 ### 对照
