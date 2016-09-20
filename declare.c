@@ -49,15 +49,17 @@ Type* deriv_type(int base, Type *rely, int count) { //类型生成
 			return ty++;
 		} else if(base == FUN) {// || base == API) {
 			if(rely -> base == FUN || rely -> base == ARR) { printf("error8!\n"); exit(-1); }
+			Type **argtypels = getargtypels(count);
 			for(Type *i = tys; i < ty; i++) {
 				if(i -> base == base
 				&& i -> rely == rely
-				&& i -> count == count) return i;
+				&& i -> count == count
+				&& i -> argtypels == argtypels) return i;
 			}
 			ty -> base = base;
 			ty -> rely = rely;
 			ty -> count = count;
-			ty -> argtypels = getargtypels(count);
+			ty -> argtypels = argtypels;
 			return ty++;
 		} else { printf("error9!\n"); exit(-1); }
 	}

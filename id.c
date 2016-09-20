@@ -8,13 +8,13 @@
 Id *id;
 
 static Id *ids;
-static Type **argtypels;
+static Type **argtypels, **argtypelss;
 
 void id_init() {
 	static int is_init = 0;
 	if(!is_init) {
 		ids = id = (Id*)malloc(MAXSIZE * sizeof(Id));
-		argtypels = (Type**)malloc(MAXSIZE * sizeof(Type*));
+		argtypelss = argtypels = (Type**)malloc(MAXSIZE * sizeof(Type*));
 		id++ -> csmk = GLO;
 		is_init = 1;
 	}
@@ -23,9 +23,20 @@ void id_init() {
 Type** getargtypels(int count) {
 	if(count == 0) return NULL;
 	Id *_id = id - count;
-	Type **_argtypels = argtypels;
-	while(_id < id) {
-		*argtypels++ = (_id++) -> type;
+	Type **_argtypels = argtypelss;
+	int i = 0;
+	while(_argtypels < argtypels) {
+		i = 0;
+		while(i < count && i < argtypels - _argtypels) {
+			if(_id[i].type != _argtypels[i]) break;
+			i++;
+		}
+		if(i == count) return _argtypels;
+		else if(i == argtypels - _argtypels) break;
+		else _argtypels++;
+	}
+	while(i < count) {
+		*argtypels++ = _id[i++].type;
 	}
 	return _argtypels;
 }
