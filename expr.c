@@ -183,6 +183,7 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 	} else if(!strcmp(tks, "!")) {
 		next();
 		er.type = expr("!").type;
+		if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 		*e++ = NOT;
 	} else { printf("error41!\n"); exit(-1); }
 	
@@ -266,92 +267,63 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			} else { printf("error54!\n"); exit(-1); }
 		} else if(!strcmp(tks, "*")) {
 			next();
-			if(er.type -> base == INT) {
-				if(expr("*").type -> base != INT) { printf("error55!\n"); exit(-1); }
-				*e++ = MUL;
-			} else { printf("error56!\n"); exit(-1); }
+			if(er.type -> base != INT) { printf("error55!\n"); exit(-1); }
+			if(expr("*").type -> base != INT) { printf("error56!\n"); exit(-1); }
+			*e++ = MUL;
 		} else if(!strcmp(tks, "/")) {
 			next();
-			if(er.type -> base == INT) {
-				if(expr("/").type -> base != INT) { printf("error57!\n"); exit(-1); }
-				*e++ = DIV;
-			} else { printf("error58!\n"); exit(-1); }
+			if(er.type -> base != INT) { printf("error57!\n"); exit(-1); }
+			if(expr("/").type -> base != INT) { printf("error58!\n"); exit(-1); }
+			*e++ = DIV;
 		} else if(!strcmp(tks, "%")) {
 			next();
-			if(er.type -> base == INT) {
-				if(expr("%").type -> base != INT) { printf("error59!\n"); exit(-1); }
-				*e++ = MOD;
-			} else { printf("error60!\n"); exit(-1); }
+			if(er.type -> base != INT) { printf("error59!\n"); exit(-1); }
+			if(expr("%").type -> base != INT) { printf("error60!\n"); exit(-1); }
+			*e++ = MOD;
 		} else if(!strcmp(tks, "==")) {
 			next();
-			Type *_type = expr("==").type;
-			if(er.type -> base == INT) {
-				if(_type -> base != INT) { printf("error61!\n"); exit(-1); }
-			} else if(er.type -> base == PTR || er.type -> base == ARR) {
-				if(_type -> base != PTR && _type -> base != ARR) { printf("error62!\n"); exit(-1); }
-			} else { printf("error63!\n"); exit(-1); }
+			if(er.type != expr("==").type) { printf("error61!\n"); exit(-1); }
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 			*e++ = EQ;
 		} else if(!strcmp(tks, ">")) {
 			next();
-			Type *_type = expr(">").type;
-			if(er.type -> base == INT) {
-				if(_type -> base != INT) { printf("error64!\n"); exit(-1); }
-			} else if(er.type -> base == PTR || er.type -> base == ARR) {
-				if(_type -> base != PTR && _type -> base != ARR) { printf("error65!\n"); exit(-1); }
-			} else { printf("error66!\n"); exit(-1); }
+			if(er.type != expr(">").type) { printf("error62!\n"); exit(-1); }
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 			*e++ = GT;
 		} else if(!strcmp(tks, "<")) {
 			next();
-			Type *_type = expr("<").type;
-			if(er.type -> base == INT) {
-				if(_type -> base != INT) { printf("error67!\n"); exit(-1); }
-			} else if(er.type -> base == PTR || er.type -> base == ARR) {
-				if(_type -> base != PTR && _type -> base != ARR) { printf("error68!\n"); exit(-1); }
-			} else { printf("error69!\n"); exit(-1); }
+			if(er.type != expr("<").type) { printf("error63!\n"); exit(-1); }
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 			*e++ = LT;
 		} else if(!strcmp(tks, "!=")) {
 			next();
-			Type *_type = expr("!=").type;
-			if(er.type -> base == INT) {
-				if(_type -> base != INT) { printf("error70!\n"); exit(-1); }
-			} else if(er.type -> base == PTR || er.type -> base == ARR) {
-				if(_type -> base != PTR && _type -> base != ARR) { printf("error71!\n"); exit(-1); }
-			} else { printf("error72!\n"); exit(-1); }
+			if(er.type != expr("!=").type) { printf("error64!\n"); exit(-1); }
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 			*e++ = EQ;
 			*e++ = NOT;
 		} else if(!strcmp(tks, ">=")) {
 			next();
-			Type *_type = expr(">=").type;
-			if(er.type -> base == INT) {
-				if(_type -> base != INT) { printf("error73!\n"); exit(-1); }
-			} else if(er.type -> base == PTR || er.type -> base == ARR) {
-				if(_type -> base != PTR && _type -> base != ARR) { printf("error74!\n"); exit(-1); }
-			} else { printf("error75!\n"); exit(-1); }
+			if(er.type != expr(">=").type) { printf("error65!\n"); exit(-1); }
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 			*e++ = LT;
 			*e++ = NOT;
 		} else if(!strcmp(tks, "<=")) {
 			next();
-			Type *_type = expr("<=").type;
-			if(er.type -> base == INT) {
-				if(_type -> base != INT) { printf("error76!\n"); exit(-1); }
-			} else if(er.type -> base == PTR || er.type -> base == ARR) {
-				if(_type -> base != PTR && _type -> base != ARR) { printf("error77!\n"); exit(-1); }
-			} else { printf("error78!\n"); exit(-1); }
+			if(er.type != expr("<=").type) { printf("error66!\n"); exit(-1); }
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
 			*e++ = GT;
 			*e++ = NOT;
 		} else if(!strcmp(tks, "&&")) {
 			next();
-			if(er.type -> base == INT) {
-				if(expr("&&").type -> base != INT) { printf("error79!\n"); exit(-1); }
-				*e++ = AND;
-			} else { printf("error80!\n"); exit(-1); }
+			expr("&&");
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
+			*e++ = AND;
 		} else if(!strcmp(tks, "||")) {
 			next();
-			if(er.type -> base == INT) {
-				if(expr("||").type -> base != INT) { printf("error81!\n"); exit(-1); }
-				*e++ = OR;
-			} else { printf("error82!\n"); exit(-1); }
-		} else { printf("error83!\n"); exit(-1); }
+			expr("||");
+			if(er.type -> base != INT) er.type = deriv_type(INT, NULL, 0);
+			*e++ = OR;
+		} else { printf("error67!\n"); exit(-1); }
 	}
 	return er;
 }
