@@ -10,7 +10,7 @@ Id *id;
 static Id *ids;
 static Type **argtyls, **argtylss;
 
-void id_init() {
+void id_init(void) {
 	static int is_init = 0;
 	if(!is_init) {
 		ids = id = (Id*)malloc(MAXSIZE * sizeof(Id));
@@ -41,8 +41,7 @@ Type** getargtyls(int count) {
 	return _argtyls;
 }
 
-void print_ids(Id *this_id) {
-	printf("- %s -\n", this_id -> name);
+void print_ids(void) {
 	for(Id *i = ids; i < id; i++){
 		if(i -> csmk == GLO) printf("GLO");
 		else if(i -> csmk == ARG) printf("ARG");
@@ -121,22 +120,22 @@ Id* getid(char *tks) {
 	printf("error69!"); exit(-1);
 }
 
-void inblock() {
+void inblock(void) {
 	(id++) -> csmk = LOC;
 }
 
-void outblock() {
+void outblock(void) {
 	do {
 		id--;
 	} while(id -> csmk != LOC);
 	//id -> csmk = 0;
 }
 
-void inparam() {
+void inparam(void) {
 	(id++) -> csmk = ARG;
 }
 
-void infunc() {
+void infunc(void) {
 	Id *i;
 	int argc = 0;
 	for(i = id - 1; i -> csmk != ARG; i--) {
@@ -149,7 +148,7 @@ void infunc() {
 	i -> csmk = FUN;
 }
 
-void outfunc() {
+void outfunc(void) {
 	do {
 		id--;
 	} while(id -> csmk != FUN);

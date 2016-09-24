@@ -7,14 +7,14 @@
 
 static int *sp;
 
-void expr_init() {
+void expr_init(void) {
 	static int is_init = 0;
 	if(!is_init) {
 		sp = (int*)malloc(MAXSIZE * sizeof(int));
 	}
 }
 
-int expr_null() {
+int expr_null(void) {
 	if(tki == Null) {
 		next();
 		return 0;

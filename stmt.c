@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void stmt() {
+void stmt(void) {
 	if(!strcmp(tks, "{")) {
 		inblock();
 		next();

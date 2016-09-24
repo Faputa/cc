@@ -7,7 +7,7 @@
 
 static Api *api, *apis;
 
-void api_init() {
+void api_init(void) {
 	static int is_init = 0;
 	if(!is_init) {
 		apis = api = (Api*)malloc(MAXSIZE * sizeof(Api));

@@ -6,7 +6,7 @@
 
 int *emit, *e, *data;
 
-void vm_init() {
+void vm_init(void) {
 	static int is_init = 0;
 	if(!is_init) {
 		emit = e = (int*)malloc(MAXSIZE * sizeof(int));

@@ -9,7 +9,7 @@
 
 static Type *ty, *tys;
 
-void declare_init() {
+void declare_init(void) {
 	static int is_init = 0;
 	if(!is_init) {
 		tys = ty = (Type*)malloc(MAXSIZE * sizeof(Type));
@@ -100,7 +100,7 @@ void print_type(Id *this_id) {
 	//printf("\n");
 }
 
-static Type* specifier() {
+static Type* specifier(void) {
 	if(tki == Int) {
 		next();
 		return deriv_type(INT, NULL, 0);

@@ -16,7 +16,7 @@ static char *point[] = {
 	"+", "-", "*", "/", "%", "=", ">", "<", "!", "^", "&", "|", "(", ")", "{", "}", "[", "]", "?", ":", ",", ";"
 };
 
-void token_init() {
+void token_init(void) {
 	static int is_init = 0;
 	if(!is_init) {
 		p = (char*)malloc(MAXSIZE * sizeof(char));
@@ -24,7 +24,7 @@ void token_init() {
 	}
 }
 
-void next() {
+void next(void) {
 	tks = ""; tki = -1;
 	while(*p) {
 		if(!strncmp(p, "//", 2) || *p == '#') { while(*p != '\n') p++; p++; }

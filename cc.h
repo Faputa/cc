@@ -45,44 +45,44 @@ extern char *p, *tks;
 extern int *e, *emit, *data, tki;
 
 //id.c
-void id_init();
+void id_init(void);
 Type** getargtyls(int count);
-void print_ids();
+void print_ids(void);
 int typesize(Type *type);
 void setid(Id *id, Type *type);
 Id* getid(char *tks);
-void inblock();
-void outblock();
-void inparam();
-void infunc();
-void outfunc();
+void inblock(void);
+void outblock(void);
+void inparam(void);
+void infunc(void);
+void outfunc(void);
 
 //declare.c
-void declare_init();
+void declare_init(void);
 Type* deriv_type(int base, Type *rely, int count);
 void print_type(Id *this_id);
 void declare(int env);
 
 //stmt.c
-void stmt();
+void stmt(void);
 
 //expr.c
-void expr_init();
-int expr_null();
+void expr_init(void);
+int expr_null(void);
 int expr_int(char *last_opr);
 void expr_arr(int env, Type *type, int offset);
 Er expr(char *last_opr);
 
 //token.c
-void token_init();
-void next();
+void token_init(void);
+void next(void);
 
 //vm.c
-void vm_init();
+void vm_init(void);
 void run_vm(int src, int debug);
 
 //api.c
-void api_init();
+void api_init(void);
 void api_register(Api fun, char *proto);
 void api_call(int offset);
 int api_getarg(int index);
