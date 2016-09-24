@@ -191,8 +191,10 @@ static Id* declarator(Type *type) {
 	}
 	setid(this_id, type);
 	
-	if(type -> base == PTR && type -> rely -> base == FUN) { //函数指针
-		id = this_id + 1;//infunc(); outfunc();
+	if(type -> base == PTR) { //函数指针*
+		Type *rely = type -> rely;
+		while(rely -> base == PTR) rely = rely -> rely;
+		if(rely -> base == FUN) id = this_id + 1;//infunc(); outfunc();
 	} else if(type -> base == FUN && this_id -> class == ARG) { //函数为形参
 		this_id -> type = deriv_type(PTR, type, 0);
 		id = this_id + 1;//infunc(); outfunc();
