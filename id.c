@@ -71,7 +71,7 @@ int typesize(Type *type) {
 
 void setid(Id *this_id, Type* type) {
 	for(Id *i = this_id - 1; i -> csmk == ID; i--) {
-		if(!strcmp(tks, i -> name)) { printf("error68!\n"); exit(-1); }
+		if(!strcmp(this_id -> name, i -> name)) { printf("error68!\n"); exit(-1); }
 	}
 	
 	//this_id -> name = tks;
