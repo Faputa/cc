@@ -78,6 +78,6 @@ int main(int argc, char *argv[]) {
 	*_main = getid("main") -> offset;
 	
 	//run
-	run_vm(src, debug);
+	vm_run(src, debug);
 	return 0;
 }

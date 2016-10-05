@@ -89,7 +89,7 @@ static int* print_emit(int *i) {
 	#undef PRINT_REG
 }
 
-void run_vm(int src, int debug) {
+void vm_run(int src, int debug) {
 	//print
 	if(src) {
 		for(int *i = emit; i < e; i++) {

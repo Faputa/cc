@@ -79,7 +79,7 @@ void next(void);
 
 //vm.c
 void vm_init(void);
-void run_vm(int src, int debug);
+void vm_run(int src, int debug);
 
 //api.c
 void api_init(void);
