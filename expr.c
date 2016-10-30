@@ -133,7 +133,7 @@ int expr_int(char *last_opr) {
 		else if(!strcmp(opr, "==")) *sp = opr1 == opr2;
 		else if(!strcmp(opr, ">")) *sp = opr1 > opr2;
 		else if(!strcmp(opr, "<")) *sp = opr1 < opr2;
-		else if(!strcmp(opr, "!=")) *sp = opr1 == opr2;
+		else if(!strcmp(opr, "!=")) *sp = opr1 != opr2;
 		else if(!strcmp(opr, ">=")) *sp = opr1 >= opr2;
 		else if(!strcmp(opr, "<=")) *sp = opr1 <= opr2;
 		else if(!strcmp(opr, "&&")) *sp = opr1 && opr2;
