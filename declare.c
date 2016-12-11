@@ -1,6 +1,6 @@
-//å¤æ‚å£°æ˜è§£æå™¨
-//èƒ½å¤Ÿè§£ææŒ‡é’ˆã€æ•°ç»„ã€å‡½æ•°
-//å‰ç½®ç¬¦å·é€’å½’è¯»å–ï¼Œåç½®ç¬¦å·å¾ªç¯è¯»å–
+//¸´ÔÓÉùÃ÷½âÎöÆ÷
+//ÄÜ¹»½âÎöÖ¸Õë¡¢Êı×é¡¢º¯Êı
+//Ç°ÖÃ·ûºÅµİ¹é¶ÁÈ¡£¬ºóÖÃ·ûºÅÑ­»·¶ÁÈ¡
 
 #include "cc.h"
 #include <stdio.h>
@@ -17,7 +17,7 @@ void declare_init(void) {
 	}
 }
 
-Type* deriv_type(int base, Type *rely, int count) { //ç±»å‹ç”Ÿæˆ
+Type* deriv_type(int base, Type *rely, int count) { //ÀàĞÍÉú³É
 	if(rely == NULL) {
 		if(base == INT) {
 			for(Type *i = tys; i < ty; i++) {
@@ -68,34 +68,34 @@ Type* deriv_type(int base, Type *rely, int count) { //ç±»å‹ç”Ÿæˆ
 
 static void _print_type(Type *type) {
 	if(type -> base == PTR) {
-		printf("æŒ‡å‘");
+		printf("Ö¸Ïò");
 		_print_type(type -> rely);
-		printf("çš„æŒ‡é’ˆ");
+		printf("µÄÖ¸Õë");
 	} else if(type -> base == ARR) {
-		printf("æ‹¥æœ‰%dä¸ªç±»å‹ä¸º", type -> count);
+		printf("ÓµÓĞ%d¸öÀàĞÍÎª", type -> count);
 		_print_type(type -> rely);
-		printf("çš„å…ƒç´ çš„æ•°ç»„");
+		printf("µÄÔªËØµÄÊı×é");
 	} else if(type -> base == FUN) {
-		//printf("éœ€è¦%dä¸ªå‚æ•°ä¸”è¿”å›å€¼ä¸º", type -> count);
+		//printf("ĞèÒª%d¸ö²ÎÊıÇÒ·µ»ØÖµÎª", type -> count);
 		for(int i = 0; i < type -> count; i++) {
-			printf("ç¬¬%dä¸ªå‚æ•°ä¸º", i + 1);
+			printf("µÚ%d¸ö²ÎÊıÎª", i + 1);
 			_print_type(type -> argtyls[i]);
-			printf("ã€");
+			printf("¡¢");
 		}
-		printf("è¿”å›å€¼ä¸º");
+		printf("·µ»ØÖµÎª");
 		_print_type(type -> rely);
-		printf("çš„å‡½æ•°");
+		printf("µÄº¯Êı");
 	} else if(type -> base == API) {
-		printf("éœ€è¦%dä¸ªå‚æ•°ä¸”è¿”å›å€¼ä¸º", type -> count);
+		printf("ĞèÒª%d¸ö²ÎÊıÇÒ·µ»ØÖµÎª", type -> count);
 		_print_type(type -> rely);
-		printf("çš„API");
+		printf("µÄAPI");
 	} else if(type -> base == INT) {
-		printf("æ•´å‹");
+		printf("ÕûĞÍ");
 	}
 }
 
 void print_type(Id *this_id) {
-	printf("%sä¸º", this_id -> name);
+	printf("%sÎª", this_id -> name);
 	_print_type(this_id -> type);
 	//printf("\n");
 }
@@ -121,21 +121,21 @@ static int lev(char *opr) {
 			lev++;
 		}
 	}
-	return 0; //å…¶ä»–ç¬¦å·
+	return 0; //ÆäËû·ûºÅ
 }
 
 static Id* declarator(Type *type);
-static int* complex(char *last_opr, int *cpx) { //å¤æ‚ç±»å‹åˆ†æ
-	//å‰ç½®ç¬¦å·
-	if(!strcmp(tks, "*")) { //æŒ‡é’ˆ
+static int* complex(char *last_opr, int *cpx) { //¸´ÔÓÀàĞÍ·ÖÎö
+	//Ç°ÖÃ·ûºÅ
+	if(!strcmp(tks, "*")) { //Ö¸Õë
 		next();
 		cpx = complex("*", cpx);
 		cpx++;
 		*cpx++ = PTR;
-	} else if(!strcmp(tks, "(")) { //æ‹¬å·
+	} else if(!strcmp(tks, "(")) { //À¨ºÅ
 		next();
 		cpx = complex(")", cpx);
-		if(strcmp(tks, ")")) { printf("error12!\n"); exit(-1); } //"("æ— æ³•åŒ¹é…åˆ°")"
+		if(strcmp(tks, ")")) { printf("error12!\n"); exit(-1); } //"("ÎŞ·¨Æ¥Åäµ½")"
 		next();
 	} else if(tki == ID) {
 		(id - 1) -> name = tks;
@@ -143,18 +143,20 @@ static int* complex(char *last_opr, int *cpx) { //å¤æ‚ç±»å‹åˆ†æ
 	} else { printf("error13!\n"); exit(-1); }
 	
 	//next();
-	//åç½®ç¬¦å·
+	//ºóÖÃ·ûºÅ
 	while(lev(tks) > lev(last_opr)) {
-		if(!strcmp(tks, "[")) { //æ•°ç»„
+		if(!strcmp(tks, "[")) { //Êı×é
 			next();
 			int count = 0;
 			if(strcmp(tks, "]")) {
-				count = expr_int("");
+				if(tki == INT) count = atoi(tks);
+				else { printf("error14!\n"); exit(-1); }
+				next();
 			}
 			*cpx++ = count;
 			*cpx++ = ARR;
 			if(strcmp(tks, "]")) { printf("error15!\n"); exit(-1); }
-		} else if(!strcmp(tks, "(")) { //å‡½æ•°æˆ–å‡½æ•°æŒ‡é’ˆ
+		} else if(!strcmp(tks, "(")) { //º¯Êı»òº¯ÊıÖ¸Õë
 			int count = 0;
 			inparam();
 			next();
@@ -179,8 +181,8 @@ static int* complex(char *last_opr, int *cpx) { //å¤æ‚ç±»å‹åˆ†æ
 static Id* declarator(Type *type) {
 	//if(strcmp(tks, "*") && strcmp(tks, "(") && tki != ID) { printf("error18!\n"); exit(-1); }
 	Id *this_id = id++;
-	int cpxs[BUFSIZE]; //å¤æ‚ç±»å‹æ ˆ
-	int *cpx = cpxs; //å¤æ‚ç±»å‹æ ˆæ ˆé¡¶æŒ‡é’ˆ
+	int cpxs[BUFSIZE]; //¸´ÔÓÀàĞÍÕ»
+	int *cpx = cpxs; //¸´ÔÓÀàĞÍÕ»Õ»¶¥Ö¸Õë
 	cpx = complex("", cpx);
 	while(cpx > cpxs) {
 		int base = *--cpx;
@@ -189,14 +191,14 @@ static Id* declarator(Type *type) {
 	}
 	setid(this_id, type);
 	
-	if(type -> base == PTR) { //å‡½æ•°æŒ‡é’ˆ*
+	if(type -> base == PTR) { //º¯ÊıÖ¸Õë*
 		Type *rely = type -> rely;
 		while(rely -> base == PTR) rely = rely -> rely;
 		if(rely -> base == FUN) id = this_id + 1;//infunc(); outfunc();
-	} else if(type -> base == FUN && this_id -> class == ARG) { //å‡½æ•°ä¸ºå½¢å‚
+	} else if(type -> base == FUN && this_id -> class == ARG) { //º¯ÊıÎªĞÎ²Î
 		this_id -> type = deriv_type(PTR, type, 0);
 		id = this_id + 1;//infunc(); outfunc();
-	} else if(type -> base == ARR && this_id -> class == ARG) { //æ•°ç»„ä¸ºå½¢å‚
+	} else if(type -> base == ARR && this_id -> class == ARG) { //Êı×éÎªĞÎ²Î
 		this_id -> type = deriv_type(PTR, type -> rely, 0);
 	}//print_type(this_id);printf("\n");
 	return this_id;
