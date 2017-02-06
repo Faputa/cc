@@ -1,2 +1,2 @@
 all:
-	@gcc cc.c declare.c expr.c id.c stmt.c token.c vm.c api.c -o cc -Wall
+	@gcc api.c cc.c declare.c expr.c ident.c stmt.c token.c type.c vm.c -o cc -Wall

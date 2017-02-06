@@ -45,10 +45,9 @@ int main(int argc, char *argv[]) {
 	if(!fname) { printf("error5!\n"); exit(-1); }
 	if(!(fp = fopen(fname, "r"))) { printf("error6!\n"); exit(-1); }
 	
-	declare_init();
+	type_init();
 	token_init();
-	id_init();
-	expr_init();
+	ident_init();
 	vm_init();
 	api_init();
 	

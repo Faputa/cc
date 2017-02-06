@@ -17,11 +17,7 @@ static char *point[] = {
 };
 
 void token_init(void) {
-	static int is_init = 0;
-	if(!is_init) {
-		p = (char*)malloc(MAXSIZE * sizeof(char));
-		is_init = 1;
-	}
+	p = (char*)malloc(MAXSIZE * sizeof(char));
 }
 
 void next(void) {

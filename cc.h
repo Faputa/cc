@@ -44,11 +44,9 @@ extern Id *id;
 extern char *p, *tks;
 extern int *e, *emit, *data, tki;
 
-//id.c
-void id_init(void);
-Type** getargtyls(int count);
+//ident.c
+void ident_init(void);
 void print_ids(void);
-int typesize(Type *type);
 void setid(Id *id, Type *type);
 Id* getid(char *tks);
 void inblock(void);
@@ -57,17 +55,19 @@ void inparam(void);
 void infunc(void);
 void outfunc(void);
 
-//declare.c
-void declare_init(void);
+//type.c
+void type_init(void);
+int typesize(Type *type);
 Type* deriv_type(int base, Type *rely, int count);
 void print_type(Id *this_id);
+
+//declare.c
 void declare(int env);
 
 //stmt.c
 void stmt(void);
 
 //expr.c
-void expr_init(void);
 int expr_null(void);
 int expr_int(char *last_opr);
 void expr_arr(int env, Type *type, int offset);

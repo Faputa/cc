@@ -7,12 +7,8 @@
 int *emit, *e, *data;
 
 void vm_init(void) {
-	static int is_init = 0;
-	if(!is_init) {
-		emit = e = (int*)malloc(MAXSIZE * sizeof(int));
-		data = (int*)malloc(MAXSIZE * sizeof(int));
-		is_init = 1;
-	}
+	emit = e = (int*)malloc(MAXSIZE * sizeof(int));
+	data = (int*)malloc(MAXSIZE * sizeof(int));
 }
 
 static int* print_emit(int *i) {
