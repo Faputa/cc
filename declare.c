@@ -31,7 +31,7 @@ static int lev(char *opr) {
 	return 0; //其他符号
 }
 
-static Id* declarator(Type *type);
+static Id* declarator(Type *type, int scope);
 static int* complex(char *last_opr, int *cpx) { //复杂类型分析
 	//前置符号
 	if(!strcmp(tks, "*")) { //指针
@@ -69,7 +69,7 @@ static int* complex(char *last_opr, int *cpx) { //复杂类型分析
 				while(1) {
 					count++;
 					Type *type = specifier();
-					declarator(type);
+					declarator(type, ARG);
 					if(!strcmp(tks, ")")) break;
 					else if(!strcmp(tks, ",")) next();
 					else { printf("error16!\n"); exit(-1); }
@@ -83,9 +83,9 @@ static int* complex(char *last_opr, int *cpx) { //复杂类型分析
 	return cpx; //update cpx
 }
 
-static Id* declarator(Type *type) {
-	//if(strcmp(tks, "*") && strcmp(tks, "(") && tki != ID) { printf("error18!\n"); exit(-1); }
+static Id* declarator(Type *type, int scope) {
 	Id *this_id = id++;
+	this_id -> class = scope;
 	int cpxs[BUFSIZE]; //复杂类型栈
 	int *cpx = cpxs; //复杂类型栈栈顶指针
 	cpx = complex("", cpx);
@@ -94,26 +94,25 @@ static Id* declarator(Type *type) {
 		int count = *--cpx;
 		type = deriv_type(base, type, count);
 	}
-	setid(this_id, type);
-	
 	if(type -> base == PTR) { //函数指针*
 		Type *rely = type -> rely;
 		while(rely -> base == PTR) rely = rely -> rely;
-		if(rely -> base == FUN) id = this_id + 1;//infunc(); outfunc();
+		if(rely -> base == FUN) id = this_id + 1;
 	} else if(type -> base == FUN && this_id -> class == ARG) { //函数为形参
-		this_id -> type = deriv_type(PTR, type, 0);
-		id = this_id + 1;//infunc(); outfunc();
+		type = deriv_type(PTR, type, 0);
+		id = this_id + 1;
 	} else if(type -> base == ARR && this_id -> class == ARG) { //数组为形参
-		this_id -> type = deriv_type(PTR, type -> rely, 0);
-	}//print_type(this_id);printf("\n");
+		type = deriv_type(PTR, type -> rely, 0);
+	}
+	setid(this_id, type);
 	return this_id;
 }
 
-void declare(int env) {
+void declare(int scope) {
 	static int varc;
-	if(env == GLO) {//printf("-%s-\n",tks);
+	if(scope == GLO) {
 		Type *type = specifier();
-		Id *this_id = declarator(type);
+		Id *this_id = declarator(type, GLO);
 		if(this_id -> type -> base == FUN) {
 			if(!strcmp(tks, "{")) {
 				infunc();
@@ -134,7 +133,7 @@ void declare(int env) {
 				*e++ = POP; *e++ = IP;
 				outfunc();
 			} else if(!strcmp(tks, ";")) {
-				id = this_id + 1;//infunc(); outfunc();
+				id = this_id + 1;
 			} else { printf("error19!\n"); exit(-1); }
 		} else {
 			while(1) {
@@ -156,15 +155,15 @@ void declare(int env) {
 				if(!strcmp(tks, ";")) break;
 				else if(!strcmp(tks, ",")) {
 					next();
-					this_id = declarator(type);
+					this_id = declarator(type, GLO);
 				} else { printf("error22!\n"); exit(-1); }
 			}
 		}
-	} else if(env == LOC) {
+	} else if(scope == LOC) {
 		Type *type = specifier();
 		while(1) {
 			//varc++;
-			Id *this_id = declarator(type);
+			Id *this_id = declarator(type, LOC);
 			if(!strcmp(tks, "=")) {
 				next();
 				if(this_id -> type -> base == INT) {

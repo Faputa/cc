@@ -39,17 +39,10 @@ void setid(Id *this_id, Type* type) {
 		if(!strcmp(this_id -> name, i -> name)) { printf("error68!\n"); exit(-1); }
 	}
 	
-	//this_id -> name = tks;
 	this_id -> type = type;
 	this_id -> csmk = ID;
 	
 	Id *last_id = this_id - 1;
-	if(last_id -> csmk != ID) {
-		this_id -> class = last_id -> csmk;
-	} else {
-		this_id -> class = last_id -> class;
-	}
-	
 	while(last_id -> csmk == LOC ||
 	      (last_id -> csmk == ID &&
 	       (last_id -> type -> base == FUN ||
