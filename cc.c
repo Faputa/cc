@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 		declare(GLO);
 		next();
 	}
-	*_main = getid("main") -> offset;
+	*_main = getid("main")->offset;
 	
 	//run
 	vm_run(src, debug);

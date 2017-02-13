@@ -17,9 +17,9 @@ void api_register(Api fun, char *proto) {
 	next();
 	Id *this_id = id;
 	declare(GLO);
-	if(this_id -> type -> base != FUN) { printf("error1!\n"); exit(-1); }
-	this_id -> type -> base = API;
-	this_id -> offset = api - apis;
+	if(this_id->type->base != FUN) { printf("error1!\n"); exit(-1); }
+	this_id->type->base = API;
+	this_id->offset = api - apis;
 	*api++ = fun;
 	p = _p;
 }
