@@ -7,6 +7,8 @@
 #include <malloc.h>
 #include <string.h>
 
+static int varc;
+
 static Type* specifier(void) {
 	if(tki == Int) {
 		next();
@@ -108,79 +110,78 @@ static Id* declarator(Type *type, int scope) {
 	return this_id;
 }
 
-void declare(int scope) {
-	static int varc;
-	if(scope == GLO) {
-		Type *type = specifier();
-		Id *this_id = declarator(type, GLO);
-		if(this_id->type->base == FUN) {
-			if(!strcmp(tks, "{")) {
-				infunc();
-				varc = 0;
-				this_id->offset = e - emit;
-				*e++ = PUSH; *e++ = BP;
-				*e++ = MOV; *e++ = BP; *e++ = SP; //bp = sp
-				*e++ = INC; *e++ = SP; int *_e = e++;
-				next();
-				while(strcmp(tks, "}")) {
-					if(tki == Int) declare(LOC);
-					else stmt();
-					next();
-				}
-				*_e = varc;
-				*e++ = MOV; *e++ = SP; *e++ = BP; //sp = bp
-				*e++ = POP; *e++ = BP;
-				*e++ = POP; *e++ = IP;
-				outfunc();
-			} else if(!strcmp(tks, ";")) {
-				id = this_id + 1;
-			} else { printf("error19!\n"); exit(-1); }
-		} else {
-			while(1) {
-				if(!strcmp(tks, "=")) {
-					next();
-					if(this_id->type->base == INT) *(data + this_id->offset) = expr_int("");
-					else if(this_id->type->base == PTR) *(data + this_id->offset) = expr_null();
-					else if(this_id->type->base == ARR) expr_arr(GLO, this_id->type, this_id->offset);
-					else { printf("error20!\n"); exit(-1); }
-				} else {
-					if(this_id->type->base == INT) *(data + this_id->offset) = 0;
-					else if(this_id->type->base == PTR) *(data + this_id->offset) = 0;
-					else if(this_id->type->base == ARR) memset(data + this_id->offset, 0, this_id->type->count);
-					else { printf("error21!\n"); exit(-1); }
-				}
-				if(!strcmp(tks, ";")) break;
-				else if(!strcmp(tks, ",")) {
-					next();
-					this_id = declarator(type, GLO);
-				} else { printf("error22!\n"); exit(-1); }
+void declare_loc(void) {
+	Type *type = specifier();
+	while(1) {
+		//varc++;
+		Id *this_id = declarator(type, LOC);
+		if(!strcmp(tks, "=")) {
+			next();
+			if(this_id->type->base == INT) {
+				*e++ = AL; *e++ = this_id->offset;
+				*e++ = PUSH; *e++ = AX;
+				if(this_id->type != expr("").type) { printf("error23!\n"); exit(-1); }
+				*e++ = ASS;
+			} else if(this_id->type->base == PTR) {
+				*e++ = AL; *e++ = this_id->offset;
+				*e++ = PUSH; *e++ = AX;
+				if(this_id->type != expr("").type) { printf("error24!\n"); exit(-1); }
+				*e++ = ASS;
+			} else if(this_id->type->base == ARR) {
+				expr_arr(LOC, this_id->type, this_id->offset);
 			}
 		}
-	} else if(scope == LOC) {
-		Type *type = specifier();
+		varc += typesize(this_id->type);
+		if(!strcmp(tks, ";")) break;
+		else if(!strcmp(tks, ",")) next();
+		else { printf("error25!\n"); exit(-1); }
+	}
+}
+
+void declare_glo(void) {
+	Type *type = specifier();
+	Id *this_id = declarator(type, GLO);
+	if(this_id->type->base == FUN) {
+		if(!strcmp(tks, "{")) {
+			infunc();
+			varc = 0;
+			this_id->offset = e - emit;
+			*e++ = PUSH; *e++ = BP;
+			*e++ = MOV; *e++ = BP; *e++ = SP; //bp = sp
+			*e++ = INC; *e++ = SP; int *_e = e++;
+			next();
+			while(strcmp(tks, "}")) {
+				if(tki == Int) declare_loc();
+				else stmt();
+				next();
+			}
+			*_e = varc;
+			*e++ = MOV; *e++ = SP; *e++ = BP; //sp = bp
+			*e++ = POP; *e++ = BP;
+			*e++ = POP; *e++ = IP;
+			outfunc();
+		} else if(!strcmp(tks, ";")) {
+			id = this_id + 1;
+		} else { printf("error19!\n"); exit(-1); }
+	} else {
 		while(1) {
-			//varc++;
-			Id *this_id = declarator(type, LOC);
 			if(!strcmp(tks, "=")) {
 				next();
-				if(this_id->type->base == INT) {
-					*e++ = AL; *e++ = this_id->offset;
-					*e++ = PUSH; *e++ = AX;
-					if(this_id->type != expr("").type) { printf("error23!\n"); exit(-1); }
-					*e++ = ASS;
-				} else if(this_id->type->base == PTR) {
-					*e++ = AL; *e++ = this_id->offset;
-					*e++ = PUSH; *e++ = AX;
-					if(this_id->type != expr("").type) { printf("error24!\n"); exit(-1); }
-					*e++ = ASS;
-				} else if(this_id->type->base == ARR) {
-					expr_arr(LOC, this_id->type, this_id->offset);
-				}
+				if(this_id->type->base == INT) *(data + this_id->offset) = expr_int("");
+				else if(this_id->type->base == PTR) *(data + this_id->offset) = expr_null();
+				else if(this_id->type->base == ARR) expr_arr(GLO, this_id->type, this_id->offset);
+				else { printf("error20!\n"); exit(-1); }
+			} else {
+				if(this_id->type->base == INT) *(data + this_id->offset) = 0;
+				else if(this_id->type->base == PTR) *(data + this_id->offset) = 0;
+				else if(this_id->type->base == ARR) memset(data + this_id->offset, 0, this_id->type->count);
+				else { printf("error21!\n"); exit(-1); }
 			}
-			varc += typesize(this_id->type);
 			if(!strcmp(tks, ";")) break;
-			else if(!strcmp(tks, ",")) next();
-			else { printf("error25!\n"); exit(-1); }
+			else if(!strcmp(tks, ",")) {
+				next();
+				this_id = declarator(type, GLO);
+			} else { printf("error22!\n"); exit(-1); }
 		}
 	}
 }

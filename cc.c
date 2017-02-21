@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 	//parse
 	next();
 	while(strcmp(tks, "") || tki != -1) {
-		declare(GLO);
+		declare_glo();
 		next();
 	}
 	*_main = getid("main")->offset;

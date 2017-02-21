@@ -62,7 +62,8 @@ Type* deriv_type(int base, Type *rely, int count);
 void print_type(Id *this_id);
 
 //declare.c
-void declare(int env);
+void declare_loc(void);
+void declare_glo(void);
 
 //stmt.c
 void stmt(void);
