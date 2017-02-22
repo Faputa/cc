@@ -12,59 +12,59 @@ int expr_null(void) {
 	} else { printf("error26!\n"); exit(-1); }
 }
 
-void expr_arr(int env, Type *type, int offset) {
-	if(env == GLO) {
-		memset(data + offset, 0, type->count);
-		if(strcmp(tks, "{")) { printf("error27!\n"); exit(-1); }
-		next();
-		if(strcmp(tks, "}")) {
-			int count = 0;
-			while(1) {
-				count++;
-				if(type->rely->base == INT) *(data + offset) = expr_int("");
-				else if(type->rely->base == PTR) *(data + offset) = expr_null();
-				else if(type->rely->base == ARR) expr_arr(GLO, type->rely, offset);
-				if(!strcmp(tks, "}")) {
-					break;
-				} else if(!strcmp(tks, ",")) {
-					offset += typesize(type->rely);
-					next();
-				} else { printf("error28!\n"); exit(-1); }
-			}
-			if(count > type->count) { printf("error29!\n"); exit(-1); }
+void arr_init_glo(Type *type, int offset) {
+	memset(data + offset, 0, type->count);
+	if(strcmp(tks, "{")) { printf("error27!\n"); exit(-1); }
+	next();
+	if(strcmp(tks, "}")) {
+		int count = 0;
+		while(1) {
+			count++;
+			if(type->rely->base == INT) *(data + offset) = expr_int("");
+			else if(type->rely->base == PTR) *(data + offset) = expr_null();
+			else if(type->rely->base == ARR) arr_init_glo(type->rely, offset);
+			if(!strcmp(tks, "}")) {
+				break;
+			} else if(!strcmp(tks, ",")) {
+				offset += typesize(type->rely);
+				next();
+			} else { printf("error28!\n"); exit(-1); }
 		}
-		next();
-	} else if(env == LOC) {
-		if(strcmp(tks, "{")) { printf("error30!\n"); exit(-1); }
-		next();
-		if(strcmp(tks, "}")) {
-			int count = 0;
-			while(1) {
-				count++;
-				if(type->rely->base == INT) {
-					*e++ = AL; *e++ = offset;
-					*e++ = PUSH; *e++ = AX;
-					if(type->rely != expr("").type) { printf("error31!\n"); exit(-1); }
-					*e++ = ASS;
-				} else if(type->rely->base == PTR) {
-					*e++ = AL; *e++ = offset;
-					*e++ = PUSH; *e++ = AX;
-					if(type->rely != expr("").type) { printf("error32!\n"); exit(-1); }
-					*e++ = ASS;
-				} else if(type->rely->base == ARR) {
-					expr_arr(LOC, type->rely, offset);
-				}
-				if(!strcmp(tks, "}")) {
-					break;
-				} else if(!strcmp(tks, ",")) {
-					offset += typesize(type->rely);
-					next();
-				} else { printf("error33!\n"); exit(-1); }
-			}
-			if(count > type->count) { printf("error34!\n"); exit(-1); }
-		}
-		next();
+		if(count > type->count) { printf("error29!\n"); exit(-1); }
 	}
+	next();
+}
+
+void arr_init_loc(Type *type, int offset) {
+	if(strcmp(tks, "{")) { printf("error30!\n"); exit(-1); }
+	next();
+	if(strcmp(tks, "}")) {
+		int count = 0;
+		while(1) {
+			count++;
+			if(type->rely->base == INT) {
+				*e++ = AL; *e++ = offset;
+				*e++ = PUSH; *e++ = AX;
+				if(type->rely != expr("").type) { printf("error31!\n"); exit(-1); }
+				*e++ = ASS;
+			} else if(type->rely->base == PTR) {
+				*e++ = AL; *e++ = offset;
+				*e++ = PUSH; *e++ = AX;
+				if(type->rely != expr("").type) { printf("error32!\n"); exit(-1); }
+				*e++ = ASS;
+			} else if(type->rely->base == ARR) {
+				arr_init_loc(type->rely, offset);
+			}
+			if(!strcmp(tks, "}")) {
+				break;
+			} else if(!strcmp(tks, ",")) {
+				offset += typesize(type->rely);
+				next();
+			} else { printf("error33!\n"); exit(-1); }
+		}
+		if(count > type->count) { printf("error34!\n"); exit(-1); }
+	}
+	next();
 }
 
 static int lev(char *opr) { //优先级越高lev越大，其他符号lev为0

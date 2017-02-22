@@ -69,9 +69,10 @@ void declare_glo(void);
 void stmt(void);
 
 //expr.c
+void arr_init_glo(Type *type, int offset);
+void arr_init_loc(Type *type, int offset);
 int expr_null(void);
 int expr_int(char *last_opr);
-void expr_arr(int env, Type *type, int offset);
 Er expr(char *last_opr);
 
 //token.c

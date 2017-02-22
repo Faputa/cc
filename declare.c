@@ -128,7 +128,7 @@ void declare_loc(void) {
 				if(this_id->type != expr("").type) { printf("error24!\n"); exit(-1); }
 				*e++ = ASS;
 			} else if(this_id->type->base == ARR) {
-				expr_arr(LOC, this_id->type, this_id->offset);
+				arr_init_loc(this_id->type, this_id->offset);
 			}
 		}
 		varc += typesize(this_id->type);
@@ -169,7 +169,7 @@ void declare_glo(void) {
 				next();
 				if(this_id->type->base == INT) *(data + this_id->offset) = expr_int("");
 				else if(this_id->type->base == PTR) *(data + this_id->offset) = expr_null();
-				else if(this_id->type->base == ARR) expr_arr(GLO, this_id->type, this_id->offset);
+				else if(this_id->type->base == ARR) arr_init_glo(this_id->type, this_id->offset);
 				else { printf("error20!\n"); exit(-1); }
 			} else {
 				if(this_id->type->base == INT) *(data + this_id->offset) = 0;
