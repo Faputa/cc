@@ -208,16 +208,8 @@ Er expr(char *last_opr) { //1 + 2 ^ 3 * 4 == (1 + (2 ^ (3) * (4)))
 			}
 			next();
 			if(argc < er.type->count) { printf("error48!\n"); exit(-1); } //参数过少
-			if(er.type->base == FUN) {
-				*e++ = SET; *e++ = AX; int *_e = e++; //set next ip
-				*e++ = PUSH; *e++ = AX;
-				*e++ = CALL; *e++ = argc;
-				*_e = e - emit;
-				*e++ = DEC; *e++ = SP; *e++ = argc + 1;
-			} else if(er.type->base == API) {
-				*e++ = CAPI; *e++ = argc;
-				*e++ = DEC; *e++ = SP; *e++ = argc + 1;
-			}
+			*e++ = (er.type->base == FUN)? CALL: CAPI; *e++ = argc;
+			*e++ = DEC; *e++ = SP; *e++ = argc + 1;
 			er.type = er.type->rely;
 		} else if(!strcmp(tks, "[")) {
 			next();

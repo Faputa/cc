@@ -189,6 +189,7 @@ void vm_run(int src, int debug) {
 			*(data + AX) = *(data + opr);
 		} else if(i == CALL) {
 			int opr = *(emit + (*(IP + data))++);
+			*(data + (*(SP + data))++) = *(IP + data);
 			*(IP + data) = *(data + *(SP + data) - opr - 2);
 		} else if(i == CAPI) {
 			int opr = *(emit + (*(IP + data))++);
